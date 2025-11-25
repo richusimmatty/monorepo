@@ -9,7 +9,7 @@
     "docker-build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker build -f apps/app-one/Dockerfile -t ghcr.io/${DOCKER_USERNAME:-richusimmatty}/app-one:latest -t ghcr.io/${DOCKER_USERNAME:-richusimmatty}/app-one:${GIT_SHA:-local} . && ([ -n \"$DOCKER_REGISTRY\" ] && docker push ghcr.io/${DOCKER_USERNAME:-richusimmatty}/app-one:latest && docker push ghcr.io/${DOCKER_USERNAME:-richusimmatty}/app-one:${GIT_SHA:-local} || true)"
+        "command": "docker build -f apps/app-one/Dockerfile -t ${DOCKER_USERNAME:-richusimmatty}/app-one:latest -t ${DOCKER_USERNAME:-richusimmatty}/app-one:${GIT_SHA:-local} . && ([ -n \"$DOCKER_REGISTRY\" ] && docker push ${DOCKER_USERNAME:-richusimmatty}/app-one:latest && docker push ${DOCKER_USERNAME:-richusimmatty}/app-one:${GIT_SHA:-local} || true)"
       }
     }
   }
