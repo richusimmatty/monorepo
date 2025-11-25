@@ -2,12 +2,38 @@
   "name": "@monorepo/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start:app-one": "nx serve app-one",
+    "start:app-two": "nx serve app-two",
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test"
+  },
   "private": true,
-  "dependencies": {},
   "devDependencies": {
     "@nx/js": "22.1.1",
+    "@nx/react": "^22.1.1",
+    "@nx/vite": "22.1.1",
+    "@nx/web": "22.1.1",
     "@nx/workspace": "22.1.1",
-    "nx": "22.1.1"
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "@vitest/ui": "^4.0.0",
+    "jiti": "2.4.2",
+    "jsdom": "~22.1.0",
+    "nx": "22.1.1",
+    "prettier": "^2.6.2",
+    "tslib": "^2.3.0",
+    "typescript": "~5.9.2",
+    "vite": "^5.0.0",
+    "vitest": "^4.0.0"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }
