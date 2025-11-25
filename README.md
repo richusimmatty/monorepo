@@ -1,96 +1,132 @@
-# Monorepo
+# Nx Monorepo - App One & App Two
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This is an Nx monorepo containing two React applications with CI/CD and Docker support.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## 🚀 Quick Start
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+### Prerequisites
+- Node.js 20.11.0 or higher
+- Docker (optional, for containerization)
 
-## Run tasks
+### Local Development
 
-To run tasks with Nx use:
+```bash
+# Install dependencies
+npm install
 
-```sh
-npx nx <target> <project-name>
+# Start app-one
+npm run start:app-one
+# or
+npx nx serve app-one
+
+# Start app-two
+npm run start:app-two
+# or
+npx nx serve app-two
 ```
 
-For example:
+## 🐳 Docker
 
-```sh
-npx nx build myproject
+### Using Docker Compose
+
+```bash
+# Build and run both apps
+docker-compose up --build
+
+# Access the apps
+# App One: http://localhost:8081
+# App Two: http://localhost:8082
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### Building Individual Images
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# Build app-one
+npx nx run app-one:docker-build
 
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
+# Build app-two
+npx nx run app-two:docker-build
 ```
 
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
+### Pulling from GitHub Container Registry
 
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
+After CI builds, images are available at:
+- `ghcr.io/richusimmatty/app-one:latest`
+- `ghcr.io/richusimmatty/app-one:<commit-sha>`
+- `ghcr.io/richusimmatty/app-two:latest`
+- `ghcr.io/richusimmatty/app-two:<commit-sha>`
 
-# Generate a library
-npx nx g @nx/react:lib some-lib
+```bash
+# Pull and run app-one
+docker pull ghcr.io/richusimmatty/app-one:latest
+docker run -p 8081:80 ghcr.io/richusimmatty/app-one:latest
+
+# Pull and run app-two
+docker pull ghcr.io/richusimmatty/app-two:latest
+docker run -p 8082:80 ghcr.io/richusimmatty/app-two:latest
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+## 🔧 Available Commands
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# Type checking
+npx nx run-many -t typecheck
 
-## Set up CI!
+# Build all projects
+npx nx run-many -t build
 
-### Step 1
+# Build Docker images for all projects
+npx nx run-many -t docker-build
 
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+# Build only affected projects
+npx nx affected -t build
+npx nx affected -t docker-build
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+## 📦 Project Structure
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
+```
+monorepo/
+├── apps/
+│   ├── app-one/          # React app with dummy data
+│   └── app-two/          # React app with dummy data
+├── .github/
+│   └── workflows/
+│       └── ci.yml        # CI/CD pipeline
+├── docker-compose.yml    # Multi-container setup
+└── package.json
 ```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 🔄 CI/CD Pipeline
 
-## Install Nx Console
+The GitHub Actions workflow automatically:
+1. Runs type checking on all projects
+2. Builds all projects
+3. Builds Docker images for affected projects only
+4. **Pushes images to GitHub Container Registry** (on push to `main`)
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+### Required GitHub Settings
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+For Docker push to work, ensure:
+1. Go to: **Settings → Actions → General → Workflow permissions**
+2. Select **"Read and write permissions"**
+3. Save
 
-## Useful links
+### Image Tagging Strategy
 
-Learn more:
+Each image is tagged with:
+- `latest` - Always points to the most recent build
+- `<commit-sha>` - Specific version for rollbacks
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 🎯 Nx Affected
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+When you push changes to only one app, Nx intelligently:
+- Type checks all projects
+- Builds all projects
+- **Only builds Docker image for the affected app**
+
+This saves time and resources in CI/CD.
+
+## 📝 License
+
+MIT
