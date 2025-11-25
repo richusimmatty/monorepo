@@ -29,3 +29,6 @@ jobs:
 
       # Run builds
       - run: npx nx run-many -t build
+
+      # Build Docker images for affected projects
+      - run: npx nx affected -t docker-build
