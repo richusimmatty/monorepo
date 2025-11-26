@@ -1,6 +1,19 @@
 # Changelog
 
 
+## [2025-11-26] - Commit 805590d
+
+### Changes
+- app one
+
+### Affected Projects
+app-one
+
+### Docker Images
+- `richusimmatty/app-one:805590d`
+- `richusimmatty/app-one:latest`
+
+
 ## [2025-11-26] - Commit 5f0a4bc
 
 ### Changes
