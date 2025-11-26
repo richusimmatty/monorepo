@@ -125,7 +125,38 @@ When you push changes to only one app, Nx intelligently:
 - Builds all projects
 - **Only builds Docker image for the affected app**
 
-This saves time and resources in CI/CD.
+This optimization saves time and resources in your CI pipeline.
+
+## 🏷️ Releases
+
+This project uses automated releases with semantic versioning.
+
+### Creating a Release
+
+```bash
+# Create a version tag
+git tag v1.0.0 -m "Release version 1.0.0"
+
+# Push the tag
+git push origin v1.0.0
+```
+
+### What Happens Automatically
+
+When you push a tag:
+1. ✅ CI builds all affected projects
+2. ✅ Docker images are tagged with:
+   - Version tag (e.g., `richusimmatty/app-one:v1.0.0`)
+   - `latest` tag
+   - Commit SHA tag
+3. ✅ CHANGELOG.md is auto-generated with commits since last release
+4. ✅ GitHub Release is created with Docker image tags
+
+### Viewing Releases
+
+- **GitHub Releases**: https://github.com/richusimmatty/monorepo/releases
+- **CHANGELOG**: See [CHANGELOG.md](CHANGELOG.md)
+- **Docker Hub**: https://hub.docker.com/u/richusimmatty
 
 ## 📝 License
 
